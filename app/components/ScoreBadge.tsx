@@ -25,4 +25,4 @@ const ScoreBadge = ({score}) => {
     );
 };
 
-export default ScoreBadge
+export default ScoreBadge;
