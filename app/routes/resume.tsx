@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import ATS from '~/components/ATS'
 import Details from '~/components/Details'
@@ -10,7 +10,7 @@ export const meta = () => ([
     {name: 'description', content: 'Detailed overview of your resume'},
 ])
 
-const resume = () => {
+const Resume = () => {
     const {auth, isLoading, fs, kv, } = usePuterStore();
     const {id} = useParams();
     const [imageUrl, setImageUrl] = useState('');
@@ -19,7 +19,9 @@ const resume = () => {
     const navigate = useNavigate();
 
     useEffect( ()=> {
-            if(!isLoading && !auth.isAuthenticated) navigate(`/auth?next=/resume/${id}`);
+            if(!isLoading && !auth.isAuthenticated) {
+                navigate(`/auth?next=/resume/${id}`);
+            }
         }, [isLoading]);
 
     useEffect( () => {
@@ -33,7 +35,7 @@ const resume = () => {
             const resumeBlob = await fs.read(data.resumePath);
             if(!resumeBlob) return;
 
-            const pdfBlob = new Blob ([resumeBlob], {type: 'aplication/pdf'});
+            const pdfBlob = new Blob ([resumeBlob], {type: 'application/pdf'});
             const resumeUrl = URL.createObjectURL(pdfBlob);
             setResumeUrl(resumeUrl);
 
@@ -42,7 +44,11 @@ const resume = () => {
             const imageUrl = URL.createObjectURL(imageBlob);
             setImageUrl(imageUrl);
 
-            setFeedback(data.feeedback);
+            const normalizedFeedback = {
+                ...data.feedback,
+                ATS: data.feedback?.ATS ?? { score: 0, tips: [] },
+            };
+            setFeedback(normalizedFeedback);
             console.log({resume, imageUrl, feedback: data.feedback});
         }
         loadResume();
@@ -56,7 +62,7 @@ const resume = () => {
                 </Link>
             </nav>
             <div className='flex flex-row w-full max-lg:flex-col-reverse'>
-                <section className="feeedback-section bg-[url('/images/bg-small.svg')] bg-cover h-[100vh] sticky top-0 items-center justify-center">
+                <section className="feedback-section bg-[url('/images/bg-small.svg')] bg-cover h-[100vh] sticky top-0 items-center justify-center">
                     {imageUrl && resumeUrl && (
                         <div className='animate-in fade-in duration-1000 gradient-border max-sm:m-0 h-[90%] max-wxl:h-fit w-fit'>
                             <a href={resumeUrl} target='_blank' rel='noopener noreferrer'>
@@ -88,4 +94,4 @@ const resume = () => {
     )
 }
 
-export default resume
+export default Resume
