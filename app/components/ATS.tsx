@@ -6,11 +6,13 @@ const ATS = ({
 }: {
   score: number;
   suggestions: { type: "good" | "improve"; tip: string }[];
+
+  
 }) => {
   return (
     <div
       className={cn(
-        "rounded-2xl shadow-md w-full bg-gradient-to-b to-light-white p-8 flex flex-col gap-4",
+        "rounded-2xl shadow-md w-full bg-gradient-to-b to-white p-8 flex flex-col gap-4",
         score > 69
           ? "from-green-100"
           : score > 49
@@ -30,7 +32,9 @@ const ATS = ({
           alt="ATS"
           className="w-10 h-10"
         />
-        <p className="text-2xl font-semibold">ATS Score - {score}/100</p>
+        <p className="text-2xl font-semibold text-black">
+          ATS Score - {score}/100
+        </p>
       </div>
       <div className="flex flex-col gap-2">
         <p className="font-medium text-xl">

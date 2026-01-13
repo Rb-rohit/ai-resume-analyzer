@@ -17,6 +17,9 @@ const Resume = () => {
     const [resumeUrl, setResumeUrl] = useState('');
     const [feedback, setFeedback] = useState<Feedback | null>(null);
     const navigate = useNavigate();
+    const atsScore =
+  (feedback?.detailed_analysis?.ats_compatibility ?? 0) * 10;
+    
 
     useEffect( ()=> {
             if(!isLoading && !auth.isAuthenticated) {
@@ -49,7 +52,7 @@ const Resume = () => {
                 ATS: data.feedback?.ATS ?? { score: 0, tips: [] },
             };
             setFeedback(normalizedFeedback);
-            console.log({resume, imageUrl, feedback: data.feedback});
+            console.log({resume, imageUrl, feedback:data.feedback});
         }
         loadResume();
     }, [id]);
@@ -64,7 +67,7 @@ const Resume = () => {
             <div className='flex flex-row w-full max-lg:flex-col-reverse'>
                 <section className="feedback-section bg-[url('/images/bg-small.svg')] bg-cover h-[100vh] sticky top-0 items-center justify-center">
                     {imageUrl && resumeUrl && (
-                        <div className='animate-in fade-in duration-1000 gradient-border max-sm:m-0 h-[90%] max-wxl:h-fit w-fit'>
+                        <div className='animate-in fade-in duration-1000 gradient-border max-sm:m-0 h-[90%] max-xl:h-fit w-fit'>
                             <a href={resumeUrl} target='_blank' rel='noopener noreferrer'>
                                 <img 
                                     src={imageUrl}
@@ -81,7 +84,7 @@ const Resume = () => {
                     {feedback ? (
                         <div className='flex flex-col gap-8 animate-in fade-in duration-1000'>
                             <Summary feedback={feedback}/>
-                            <ATS score={feedback.ATS.score || 0} suggestions={feedback.ATS.tips || []} />
+                            <ATS score={atsScore} suggestions={feedback?.ATS?.tips ?? []} />
                             <Details feedback={feedback} />
                         </div>
                     ) : (

@@ -1,13 +1,16 @@
-import React from 'react'
+
 import ScoreGauge from './ScoreGauge'
 import ScoreBadge from './ScoreBadge';
 
 const Summary = ({feedback}: {feedback:Feedback}) => {
+    // console.log("SUMMARY feedback:", feedback);
 
     const Category = ({title, score}: {title:string, score: number}) => {
-        const textColor = score > 70 ? 'text-green-600'
-            :score > 49
-            ? 'text-yllow-600' : 'text-red-600';
+        const textColor = score > 70 
+            ? 'text-green-600'
+            : score > 49
+            ? 'text-yellow-600' 
+            : 'text-red-600';
 
         return(
             <div className='resume-summary'>
@@ -24,11 +27,13 @@ const Summary = ({feedback}: {feedback:Feedback}) => {
             </div>
         );
     };
-    const overallScore = feedback?.overallScore ?? 0;
-    const toneScore = feedback?.toneAndStyle?.score ?? 0;
-    const contentScore = feedback?.content?.score ?? 0;
-    const structureScore = feedback?.structure?.score ?? 0;
-    const skillsScore = feedback?.skills?.score ?? 0;
+    const overallScore = Math.round((feedback?.overall_rating ?? 0) * 10);
+
+const toneScore = (feedback?.detailed_analysis?.relevance_to_job ?? 0) * 10;
+const contentScore = (feedback?.detailed_analysis?.content_quality ?? 0) * 10;
+const structureScore = (feedback?.detailed_analysis?.formatting ?? 0) * 10;
+const skillsScore = (feedback?.detailed_analysis?.keyword_optimization ?? 0) * 10;
+
     return (
         <div className='bg-white rounded-2xl shadow-md w-full'>
             <div className='flex flex-row items-center p-4 gap-8'>

@@ -111,12 +111,52 @@ const Details = ({ feedback }: { feedback: Feedback }) => {
     return <div>Loading feedback...</div>;
   }
 
-  const {
-    toneAndStyle = { score: 0, tips: [] },
-    content = { score: 0, tips: [] },
-    structure = { score: 0, tips: [] },
-    skills = { score: 0, tips: [] },
-  } = feedback;
+  const analysis = feedback.detailed_analysis;
+
+const toneAndStyle = {
+  score: (analysis?.relevance_to_job ?? 0) * 10,
+  tips: [
+    {
+      type: "improve",
+      tip: "Improve professional tone",
+      explanation: "Your resume tone could better match the target job role."
+    }
+  ]
+};
+
+const content = {
+  score: (analysis?.content_quality ?? 0) * 10,
+  tips: [
+    {
+      type: "improve",
+      tip: "Add more technical detail",
+      explanation: "Your project descriptions lack technical depth."
+    }
+  ]
+};
+
+const structure = {
+  score: (analysis?.formatting ?? 0) * 10,
+  tips: [
+    {
+      type: "good",
+      tip: "Well formatted",
+      explanation: "Your resume structure is ATS friendly."
+    }
+  ]
+};
+
+const skills = {
+  score: (analysis?.keyword_optimization ?? 0) * 10,
+  tips: [
+    {
+      type: "improve",
+      tip: "Add more keywords",
+      explanation: "Include job-specific keywords to improve ATS ranking."
+    }
+  ]
+};
+
 
   return (
     <div className="flex flex-col gap-4 w-full">
